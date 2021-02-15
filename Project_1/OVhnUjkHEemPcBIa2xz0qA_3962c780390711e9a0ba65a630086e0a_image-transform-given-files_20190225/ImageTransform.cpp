@@ -68,6 +68,26 @@ PNG grayscale(PNG image) {
  */
 PNG createSpotlight(PNG image, int centerX, int centerY) {
 
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel & pixel = image.getPixel(x, y);
+
+      // `pixel` is a reference to the memory stored inside of the PNG `image`,
+      // which means you're changing the image directly. No need to `set`
+      // the pixel since you're directly changing the memory of the image.
+      unsigned distance = sqrt( pow((x - centerX), 2) + pow((y - centerY), 2));
+      double decrease = (100 - (0.5 * distance)) / 100;
+
+      if (decrease < 0.2)
+      {
+        decrease = 0.2;
+      }
+
+      pixel.l *= decrease;
+
+    }
+  }
+
   return image;
   
 }
@@ -84,6 +104,24 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
  * @return The illinify'd image.
 **/
 PNG illinify(PNG image) {
+
+for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel & pixel = image.getPixel(x, y);
+
+      // `pixel` is a reference to the memory stored inside of the PNG `image`,
+      // which means you're changing the image directly. No need to `set`
+      // the pixel since you're directly changing the memory of the image.
+      if (pixel.h > 113 & pixel.h < 293) 
+      {
+        pixel.h = 216;
+      }
+      else 
+      {
+        pixel.h = 11;
+      }
+    }
+  }
 
   return image;
 }
@@ -102,6 +140,23 @@ PNG illinify(PNG image) {
 * @return The watermarked image.
 */
 PNG watermark(PNG firstImage, PNG secondImage) {
+
+  for (unsigned x = 0; x < firstImage.width(); x++) {
+    for (unsigned y = 0; y < firstImage.height(); y++) {
+      HSLAPixel & pixel1 = firstImage.getPixel(x, y);
+      HSLAPixel & pixel2 = secondImage.getPixel(x, y);
+
+      // `pixel` is a reference to the memory stored inside of the PNG `image`,
+      // which means you're changing the image directly. No need to `set`
+      // the pixel since you're directly changing the memory of the image.
+      if (pixel2.l == 1.) {
+        pixel1.l += 0.2;
+      }
+      if (pixel1.l > 1.) {
+        pixel1.l = 1.;
+      }
+    }
+  }
 
   return firstImage;
 }
