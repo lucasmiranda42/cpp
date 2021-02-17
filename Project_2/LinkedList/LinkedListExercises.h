@@ -281,20 +281,44 @@ LinkedList<T> LinkedList<T>::merge(const LinkedList<T>& other) const {
   // Please implement this function according to the description
   // above and in the instructions PDF.
 
-  // Hints:
-  // 1. Assuming that the left and right lists are already sorted, remember
-  //    that the smallest items are already available at the front. You can
-  //    access them immediately.
-  // 2. Think of which item needs to be placed first in the merged list.
-  //    Then think about what item should be placed second. You need to
-  //    think carefully about which list to take from next after you take
-  //    each single item.
-  // 3. You can do this while walking down the left and right lists exactly
-  //    once. Do not loop over the lists multiple times. If you are doing
-  //    that, your implementation is probably already running in O(n^2)
-  //    time or worse, and not O(n).
-  // 4. Remember, DO NOT try to use insertOrdered here. That would be
-  //    very slow.
+  // 1. Deal with special cases. A is empty, B is empty, both are empty
+  while (left.size() > 0 || right.size() > 0) {
+
+    if (left.size() > 0 && right.size() > 0) {
+
+      T& head_left = left.front();
+      T& head_right = right.front();
+
+      if (head_right < head_left) {
+        merged.pushBack(head_right);
+        right.popFront();
+      }
+      else {
+        merged.pushBack(head_left);
+        left.popFront();
+      }
+
+    }
+
+    else if (left.size() == 0) {
+      T& head_right = right.front();
+      merged.pushBack(head_right);
+      right.popFront();
+    }
+
+    else if (right.size() == 0) {
+      T& head_left = left.front();
+      merged.pushBack(head_left);
+      left.popFront();
+    
+    }
+  }
+
+  // 2. If both are populated, read the fronts and compare them.
+  // Add the smallest item to merged and repeat. If it's a tie, pick
+  // from A.
+
+
 
   // -----------------------------------------------------------
 
