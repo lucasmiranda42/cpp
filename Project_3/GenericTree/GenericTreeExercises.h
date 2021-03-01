@@ -98,8 +98,23 @@ static void treeFactory(GenericTree<int>& tree) {
 
   // ...
 
+  tree.clear();
+  tree.createRoot(4);
+
+  auto root = tree.getRootPtr();
+  // Since addChild returns a pointer to a node, it's possible for us
+  // to chain together function calls like this in succession:
+  auto eight = root->addChild(8);
+  eight->addChild(16)->addChild(42);
+  eight->addChild(23);
+  root->addChild(15);
+
+
+
+
 }
 
+  
 // treeFactoryTest: This function demonstrates the execution of treeFactory
 // and displays a preview of the results in the main function.
 // (You do NOT need to edit this function.)
@@ -325,9 +340,39 @@ std::vector<T> traverseLevels(GenericTree<T>& tree) {
   // with the .push_back() member function.
 
   // ...
+  // Add root to results!
+  results.push_back(rootNodePtr->data);
 
-  return results;
-}
+  std::vector< TreeNode* > childPtrs;
+  std::vector< TreeNode* > next_childPtrs;
+  
+  childPtrs = rootNodePtr->childrenPtrs;
+  
+  while(childPtrs.size() != 0)
+  {
+    next_childPtrs.clear();
+    
+    for(auto current : childPtrs)
+    {
+      T data = current->data;
+      results.push_back(data);
+      
+      for(auto next : current->childrenPtrs)
+      {
+        next_childPtrs.push_back(next);
+        
+      }
+      
+    }
+    
+    childPtrs.clear();
+    childPtrs = next_childPtrs;
+    
+    }
+
+    return results;
+
+  }
 
 // traversalTest: Runs some tests with your traverseLevels function and
 // displays comparison output. (You do NOT need to edit this function.)
